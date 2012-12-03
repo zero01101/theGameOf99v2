@@ -46,7 +46,7 @@ namespace theGameOf99v2
                 tries++;
                 currentPlayer = playerList[0];
             }
-            if (tries > 4)
+            if (tries > 4000)
             {
                 System.Windows.Forms.MessageBox.Show("well, none of you have cards left.  none of you.\r\nall of you lose.  i am ashamed for you.\r\nthe game will now close because everyone lost.", "unbelievable");
                 System.Environment.Exit(-1);        
