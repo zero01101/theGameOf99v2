@@ -1,43 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using theGameOf99v2.Interfaces;
 
 namespace theGameOf99v2
 {
-    public class boardsquare : Button
+    public class BoardSquare : Button, ISelectable
     {
-        public int squareID;
-        public int row;
-        public int column;
-        public player occupant;
-        public bool occupied = false;
+        private readonly int _squareId;
+        private Player _occupant;
 
-        public bool occupy(object sender, player player, int selectedCard) //the only thing you can really do to a boardsquare object
+        public BoardSquare(int squareId)
         {
-            boardsquare square = (sender as boardsquare);
-            DialogResult result = MessageBox.Show("are you sure you wish to occupy square " + square.squareID.ToString() + "?", "HALT", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
+            _squareId = squareId;
+        }
+
+        public int Id { get { return _squareId; } }
+        public Player Occupant { get { return _occupant; } }
+        public bool Occupied { get { return _occupant != null; } }
+
+        public bool Occupy(Player player) //the only thing you can really do to a BoardSquare object
+        {
+            if (DialogResult.Yes == MessageBox.Show("are you sure you wish to Occupy square " + Id + "?", "HALT", MessageBoxButtons.YesNo))
             {
-                switch (player.id)
+                switch (player.Id)
                 {
                     case 1:
-                        square.BackColor = System.Drawing.Color.Red;
+                        BackColor = Color.Red;
                         break;
                     case 2:
-                        square.BackColor = System.Drawing.Color.Blue;
+                        BackColor = Color.Blue;
                         break;
                     case 3:
-                        square.BackColor = System.Drawing.Color.Green;
+                        BackColor = Color.Green;
                         break;
                 }
-                square.Enabled = false;
-                square.occupied = true;
-                square.occupant = player;
-                player.ownedSquares.Add(square.squareID);
-                player.removeCard(player, selectedCard);
+                Enabled = false;
+                _occupant = player;
+                player.OwnedSquares.Add(Id);
+                player.RemoveCardSelectedCard();
             }
-            return square.occupied;
+            return Occupied;
         }
     }
 }

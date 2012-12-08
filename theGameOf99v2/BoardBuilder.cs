@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using theGameOf99v2.Interfaces;
 
 namespace theGameOf99v2
 {
-    public static class BoardBuilder
+    internal static class BoardBuilder
     {
-        public static IList<ISquareCollection> BuildBoard(Action<boardsquare> addAction)
+        public static IList<ISquareCollection> BuildBoard(Action<BoardSquare> addAction)
         {
-            var tiles = new[] { 
-                73, 72, 71, 70, 69, 68, 67, 66, 65, -1, 
-                74, 57, 58, 59, 60, 61, 62, 63, 64, 99, 
+            var tiles = new[]
+            {
+                73, 72, 71, 70, 69, 68, 67, 66, 65, -1,
+                74, 57, 58, 59, 60, 61, 62, 63, 64, 99,
                 75, 56, 21, 20, 19, 18, 17, 36, 37, 98,
-                76, 55, 22, 13, 14, 15, 16, 35, 38, 97, 
-                77, 54, 23, 12,  1,  4,  5, 34, 39, 96, 
-                78, 53, 24, 11,  2,  3,  6, 33, 40, 95,
-                79, 52, 25, 10,  9,  8,  7, 32, 41, 94, 
-                80, 51, 26, 27, 28, 29, 30, 31, 42, 93, 
+                76, 55, 22, 13, 14, 15, 16, 35, 38, 97,
+                77, 54, 23, 12, 1, 4, 5, 34, 39, 96,
+                78, 53, 24, 11, 2, 3, 6, 33, 40, 95,
+                79, 52, 25, 10, 9, 8, 7, 32, 41, 94,
+                80, 51, 26, 27, 28, 29, 30, 31, 42, 93,
                 81, 50, 49, 48, 47, 46, 45, 44, 43, 92,
                 82, 83, 84, 85, 86, 87, 88, 89, 90, 91
             };
@@ -31,7 +33,8 @@ namespace theGameOf99v2
             return squares;
         }
 
-        private static List<ISquareCollection> BuildRows(int[] tiles, Action<boardsquare> squareCreatedAction)
+        private static List<ISquareCollection> BuildRows(
+            int[] tiles, Action<BoardSquare> squareCreatedAction)
         {
             var rows = new List<ISquareCollection>();
             int count = 0;
@@ -54,13 +57,12 @@ namespace theGameOf99v2
             return rows;
         }
 
-        private static  boardsquare CreateSquare(int tile, int row, int column)
+        private static BoardSquare CreateSquare(int tile, int row, int column)
         {
-            var square = new boardsquare(); //boardsquare object inherits button - see boardsquare.cs
+            var square = new BoardSquare(tile); //BoardSquare object inherits button - see BoardSquare.cs
             square.Text = tile.ToString();
-            square.squareID = tile;
             square.Size = new System.Drawing.Size(35, 35);
-            square.Location = new Point(column * 35, row * 35);
+            square.Location = new Point(column*35, row*35);
             square.Enabled = false;
             return square;
         }
@@ -71,13 +73,14 @@ namespace theGameOf99v2
             for (int column = 0; column < 10; column++)
             {
                 var squareCollection = new SquareCollection();
-                columns.Add(rows.Aggregate(squareCollection, (newCollection, x) =>
-                {
-                    var square = x[column];
-                    if (square != null)
-                        newCollection.AddSquare(square);
-                    return newCollection;
-                }));
+                columns.Add(rows.Aggregate(squareCollection,
+                    (newCollection, x) =>
+                    {
+                        var square = x[column];
+                        if (square != null)
+                            newCollection.AddSquare(square);
+                        return newCollection;
+                    }));
             }
             return columns;
         }
@@ -174,50 +177,4 @@ namespace theGameOf99v2
             return rightDiagnals;
         }
     }
-
-    public interface ISquareCollection
-    {
-        bool CheckIfWinner(player player);
-        boardsquare this[int index] { get; }
-    }
-
-    public class SquareCollection : ISquareCollection
-    {
-        private readonly List<boardsquare> _squares = new List<boardsquare>();
-
-        public int Length { get { return _squares.Count; } }
-
-        public void AddSquare(boardsquare square)
-        {
-            _squares.Add(square);
-        }
-
-        public boardsquare this[int index]
-        {
-            get
-            {
-                if (index < _squares.Count && index >= 0)
-                    return _squares[index];
-                return null;
-            }
-        }
-
-        public bool CheckIfWinner(player player)
-        {
-            int consecutive = 0;
-            foreach (var square in _squares)
-            {
-                if (square.occupant == player)
-                {
-                    consecutive++;
-                }
-                else
-                {
-                    consecutive = 0;
-                }
-            }
-            return consecutive == 5;
-        }
-    }
-
 }

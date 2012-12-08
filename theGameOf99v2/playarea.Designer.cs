@@ -1,6 +1,6 @@
 ﻿namespace theGameOf99v2
 {
-    partial class playarea
+    partial class PlayArea
     {
         /// <summary>
         /// Required designer variable.
@@ -10,7 +10,7 @@
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param Name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -30,17 +30,17 @@
         {
             this.btnDrawCard = new System.Windows.Forms.Button();
             this.btnDiscard = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.radioCard0 = new System.Windows.Forms.RadioButton();
-            this.radioCard4 = new System.Windows.Forms.RadioButton();
-            this.radioCard3 = new System.Windows.Forms.RadioButton();
-            this.radioCard2 = new System.Windows.Forms.RadioButton();
-            this.radioCard1 = new System.Windows.Forms.RadioButton();
+            this.cardsPanel = new System.Windows.Forms.Panel();
+            this.radioCard0 = new theGameOf99v2.Card();
+            this.radioCard4 = new theGameOf99v2.Card();
+            this.radioCard3 = new theGameOf99v2.Card();
+            this.radioCard2 = new theGameOf99v2.Card();
+            this.radioCard1 = new theGameOf99v2.Card();
             this.btnHand = new System.Windows.Forms.Button();
             this.lblPlayer = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.panel1.SuspendLayout();
+            this.cardsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnDrawCard
@@ -52,7 +52,7 @@
             this.btnDrawCard.TabIndex = 14;
             this.btnDrawCard.Text = "draw new card";
             this.btnDrawCard.UseVisualStyleBackColor = true;
-            this.btnDrawCard.Click += new System.EventHandler(this.btnDrawCard_Click);
+            this.btnDrawCard.Click += new System.EventHandler(this.OnDrawCardClicked);
             // 
             // btnDiscard
             // 
@@ -63,23 +63,24 @@
             this.btnDiscard.TabIndex = 13;
             this.btnDiscard.Text = "discard selected card";
             this.btnDiscard.UseVisualStyleBackColor = true;
-            this.btnDiscard.Click += new System.EventHandler(this.btnDiscard_Click);
+            this.btnDiscard.Click += new System.EventHandler(this.OnDiscardClicked);
             // 
-            // panel1
+            // cardsPanel
             // 
-            this.panel1.Controls.Add(this.radioCard0);
-            this.panel1.Controls.Add(this.radioCard4);
-            this.panel1.Controls.Add(this.radioCard3);
-            this.panel1.Controls.Add(this.radioCard2);
-            this.panel1.Controls.Add(this.radioCard1);
-            this.panel1.Location = new System.Drawing.Point(392, 66);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(186, 150);
-            this.panel1.TabIndex = 12;
-            this.panel1.Visible = false;
+            this.cardsPanel.Controls.Add(this.radioCard0);
+            this.cardsPanel.Controls.Add(this.radioCard4);
+            this.cardsPanel.Controls.Add(this.radioCard3);
+            this.cardsPanel.Controls.Add(this.radioCard2);
+            this.cardsPanel.Controls.Add(this.radioCard1);
+            this.cardsPanel.Location = new System.Drawing.Point(392, 66);
+            this.cardsPanel.Name = "cardsPanel";
+            this.cardsPanel.Size = new System.Drawing.Size(186, 150);
+            this.cardsPanel.TabIndex = 12;
+            this.cardsPanel.Visible = false;
             // 
             // radioCard0
             // 
+            this.radioCard0.Id = 0;
             this.radioCard0.Location = new System.Drawing.Point(3, 3);
             this.radioCard0.Name = "radioCard0";
             this.radioCard0.Size = new System.Drawing.Size(104, 24);
@@ -88,10 +89,11 @@
             this.radioCard0.Text = "card";
             this.radioCard0.UseVisualStyleBackColor = true;
             this.radioCard0.Visible = false;
-            this.radioCard0.CheckedChanged += new System.EventHandler(this.card_checked);
+            this.radioCard0.CheckedChanged += new System.EventHandler(this.OnCardChecked);
             // 
             // radioCard4
             // 
+            this.radioCard4.Id = 4;
             this.radioCard4.Location = new System.Drawing.Point(3, 123);
             this.radioCard4.Name = "radioCard4";
             this.radioCard4.Size = new System.Drawing.Size(104, 24);
@@ -100,10 +102,11 @@
             this.radioCard4.Text = "card";
             this.radioCard4.UseVisualStyleBackColor = true;
             this.radioCard4.Visible = false;
-            this.radioCard4.CheckedChanged += new System.EventHandler(this.card_checked);
+            this.radioCard4.CheckedChanged += new System.EventHandler(this.OnCardChecked);
             // 
             // radioCard3
             // 
+            this.radioCard3.Id = 3;
             this.radioCard3.Location = new System.Drawing.Point(3, 93);
             this.radioCard3.Name = "radioCard3";
             this.radioCard3.Size = new System.Drawing.Size(104, 24);
@@ -112,10 +115,11 @@
             this.radioCard3.Text = "card";
             this.radioCard3.UseVisualStyleBackColor = true;
             this.radioCard3.Visible = false;
-            this.radioCard3.CheckedChanged += new System.EventHandler(this.card_checked);
+            this.radioCard3.CheckedChanged += new System.EventHandler(this.OnCardChecked);
             // 
             // radioCard2
             // 
+            this.radioCard2.Id = 2;
             this.radioCard2.Location = new System.Drawing.Point(3, 63);
             this.radioCard2.Name = "radioCard2";
             this.radioCard2.Size = new System.Drawing.Size(104, 24);
@@ -124,10 +128,11 @@
             this.radioCard2.Text = "card";
             this.radioCard2.UseVisualStyleBackColor = true;
             this.radioCard2.Visible = false;
-            this.radioCard2.CheckedChanged += new System.EventHandler(this.card_checked);
+            this.radioCard2.CheckedChanged += new System.EventHandler(this.OnCardChecked);
             // 
             // radioCard1
             // 
+            this.radioCard1.Id = 1;
             this.radioCard1.Location = new System.Drawing.Point(3, 33);
             this.radioCard1.Name = "radioCard1";
             this.radioCard1.Size = new System.Drawing.Size(104, 24);
@@ -136,7 +141,7 @@
             this.radioCard1.Text = "card";
             this.radioCard1.UseVisualStyleBackColor = true;
             this.radioCard1.Visible = false;
-            this.radioCard1.CheckedChanged += new System.EventHandler(this.card_checked);
+            this.radioCard1.CheckedChanged += new System.EventHandler(this.OnCardChecked);
             // 
             // btnHand
             // 
@@ -144,9 +149,9 @@
             this.btnHand.Name = "btnHand";
             this.btnHand.Size = new System.Drawing.Size(186, 23);
             this.btnHand.TabIndex = 11;
-            this.btnHand.Text = "show hand";
+            this.btnHand.Text = "show Hand";
             this.btnHand.UseVisualStyleBackColor = true;
-            this.btnHand.Click += new System.EventHandler(this.btnHand_Click);
+            this.btnHand.Click += new System.EventHandler(this.OnToggleHandClicked);
             // 
             // lblPlayer
             // 
@@ -162,7 +167,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 19);
             this.label1.TabIndex = 9;
-            this.label1.Text = "current player:";
+            this.label1.Text = "current Player:";
             // 
             // textBox1
             // 
@@ -171,14 +176,14 @@
             this.textBox1.Size = new System.Drawing.Size(566, 20);
             this.textBox1.TabIndex = 8;
             // 
-            // playarea
+            // PlayArea
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(590, 386);
             this.Controls.Add(this.btnDrawCard);
             this.Controls.Add(this.btnDiscard);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.cardsPanel);
             this.Controls.Add(this.btnHand);
             this.Controls.Add(this.lblPlayer);
             this.Controls.Add(this.label1);
@@ -186,10 +191,10 @@
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(606, 424);
             this.MinimumSize = new System.Drawing.Size(606, 424);
-            this.Name = "playarea";
-            this.Text = "the game of 99!";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.playarea_FormClosed);
-            this.panel1.ResumeLayout(false);
+            this.Name = "PlayArea";
+            this.Text = "the Game of 99!";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
+            this.cardsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,12 +204,12 @@
 
         private System.Windows.Forms.Button btnDrawCard;
         private System.Windows.Forms.Button btnDiscard;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RadioButton radioCard0;
-        private System.Windows.Forms.RadioButton radioCard4;
-        private System.Windows.Forms.RadioButton radioCard3;
-        private System.Windows.Forms.RadioButton radioCard2;
-        private System.Windows.Forms.RadioButton radioCard1;
+        private System.Windows.Forms.Panel cardsPanel;
+        private Card radioCard0;
+        private Card radioCard4;
+        private Card radioCard3;
+        private Card radioCard2;
+        private Card radioCard1;
         private System.Windows.Forms.Button btnHand;
         private System.Windows.Forms.Label lblPlayer;
         private System.Windows.Forms.Label label1;

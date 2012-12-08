@@ -1,164 +1,164 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using theGameOf99v2.Interfaces;
 
 namespace theGameOf99v2
 {
-    
-    public partial class playarea : Form
+    public partial class PlayArea : Form
     {
-        public game currentGame;
-        private IList<ISquareCollection> _squares;
+        private readonly IList<ISquareCollection> _columns;
 
-        public playarea(game gameInProgress) //ctor - happens right when you instantiate the class - this stuff should be in every new game, but only once per game or something
+        public PlayArea(Game gameInProgress)
+            //ctor - happens right when you instantiate the class - this stuff should be in every new Game, but only once per Game or something
         {
-            _squares = new List<ISquareCollection>();
-            currentGame = gameInProgress;
+            _columns = new List<ISquareCollection>();
+            CurrentGame = gameInProgress;
             InitializeComponent();
-            _squares = BoardBuilder.BuildBoard(square => 
+            _columns = BoardBuilder.BuildBoard(square =>
             {
-                square.Click += square_Click;
+                square.Click += OnSquareClick;
                 Controls.Add(square);
             });
         }
 
-        public bool CheckifWinner(player player)
+        public Game CurrentGame { get; private set; }
+
+        public bool CheckifWinner(Player player)
         {
-            return _squares.Any(x => x.CheckIfWinner(player));
+            return _columns.Any(x => x.CheckIfWinner(player));
         }
 
-        public void roundUpdate(player nextPlayer) //this progresses the visual elements on the form to the next player and should be called after a player's play choice is confirmed
+        public void RoundUpdate(Player nextPlayer)
+            //this progresses the visual elements on the form to the next Player and should be called after a Player's play choice is confirmed
         {
-            if (nextPlayer.hand.Count > 0)
+            if (nextPlayer.Hand.Count > 0)
             {
-                for (int i = 0; i < 5; i++)
+                var cardPanelControls = Controls["cardsPanel"].Controls;
+                cardPanelControls.OfType<RadioButton>()
+                                      .Each(rb =>
+                                      {
+                                          rb.Checked = false;
+                                          rb.Visible = false;
+                                      });
+
+                Controls.OfType<BoardSquare>().Each(bs => bs.Enabled = false);
+
+                lblPlayer.Text = nextPlayer.Name;
+
+                cardPanelControls.GetItems<Card>(0, nextPlayer.Hand.Count)
+                                      .Each((card, index) => 
+                                      {
+                                          card.Visible = true;
+                                          card.Text = nextPlayer.Hand[index] + " to 99";
+                                      });
+
+                if (cardsPanel.Visible)
                 {
-                    RadioButton cardbutton = (this.Controls["panel1"].Controls["radioCard" + i] as RadioButton);
-                    cardbutton.Checked = false;
-                    cardbutton.Visible = false;
+                    cardsPanel.Visible = false;
+                    btnHand.Text = "show Hand";
                 }
-                foreach (var square in this.Controls.OfType<boardsquare>())
-                {
-                    square.Enabled = false;
-                }
-                lblPlayer.Text = nextPlayer.name;
-                for (int i = 0; i < nextPlayer.hand.Count; i++)
-                {
-                    RadioButton cardbutton = (this.Controls["panel1"].Controls["radioCard" + i] as RadioButton);
-                    cardbutton.Visible = true;
-                    cardbutton.Text = nextPlayer.hand[i].ToString() + " to 99";
-                }
-                if (panel1.Visible)
-                {
-                    panel1.Visible = false;
-                    btnHand.Text = "show hand";
-                }
+
                 btnDrawCard.Enabled = false;
                 btnDiscard.Enabled = false;
-                if (nextPlayer.hand.Count < 5)
+                if (nextPlayer.Hand.Count < 5)
                 {
                     btnDrawCard.Enabled = true;
                 }
             }
             else
             {
-                currentGame.prepareNextPlayer();
-                roundUpdate(currentGame.currentPlayer);
+                CurrentGame.PrepareNextPlayer();
+                RoundUpdate(CurrentGame.CurrentPlayer);
             }
         }
 
-        private void square_Click(object sender, EventArgs e) //wut happen what you click a squrr
+        private void OnCardChecked(object sender, EventArgs e)
+            //radiobox clicked - next, update the clickables
         {
-            var square = (sender as boardsquare);
-            if (!(square.occupied))
-            {
-                square.occupy(square, currentGame.currentPlayer, currentGame.currentPlayer.selectedCard);
-                if (square.occupied)
-                {
-                    //currentGame.checkForWin(square);
-                    bool gameover = currentGame.checkForWin();
-                    if (gameover == false)
-                    {
-                        currentGame.prepareNextPlayer();
-                        roundUpdate(currentGame.currentPlayer); //technically NEXT player gets implemented because player.ID == players[indexer++]                    
-                    }
-                    else
-                    { Application.Exit(); }
-                }
-            }
-        }
-
-        void card_checked(object sender, EventArgs e) //radiobox clicked - next, update the clickables
-        {            
-            var rad = (sender as RadioButton);            
-            int i = int.Parse(rad.Text.ToString().Replace(" to 99", ""));
-            currentGame.currentPlayer.selectedCard = i;
-            updateAvailableSquares(i);                                                
+            var rad = (RadioButton)sender;
+            int card = int.Parse(rad.Text.Replace(" to 99", String.Empty));
+            CurrentGame.CurrentPlayer.SelectedCard = card;
+            UpdateAvailableSquares(card);
             btnDiscard.Enabled = true;
         }
 
-        void updateAvailableSquares(int chosenCard) //this updates the boardsquare clickables
+        private void OnDiscardClicked(object sender, EventArgs e) //get ridda thet there card there
         {
-            for (int i = 1; i < chosenCard; i++)
+            if (DialogResult.Yes
+                == MessageBox.Show(
+                    "are you sure you wish to discard " + CurrentGame.CurrentPlayer.SelectedCard.ToString()
+                    + "?",
+                    "HALT",
+                    MessageBoxButtons.YesNo))
             {
-                boardsquare b = Controls.GetSquare(i);
-                b.Enabled = false;
-            }
-            for (int i = chosenCard; i < 100; i++)
-            {
-                boardsquare b = this.Controls.GetSquare(i);
-                if (!(b.occupied)) { b.Enabled = true; }
+                CurrentGame.CurrentPlayer.RemoveCardSelectedCard();
+                CurrentGame.CurrentPlayer.Hand.Sort();
+                CurrentGame.PrepareNextPlayer();
+                RoundUpdate(CurrentGame.CurrentPlayer); //technically NEXT Player
             }
         }
 
-        private void btnHand_Click(object sender, EventArgs e) //change the state of the panel with the card radiobuttons
+        private void OnDrawCardClicked(object sender, EventArgs e) //MOAR CARDS PLS
         {
-            switch (panel1.Visible)
+            if (DialogResult.Yes
+                == MessageBox.Show("are you sure you wish to draw a new card?",
+                    "HALT",
+                    MessageBoxButtons.YesNo))
             {
-                case true:
-                    panel1.Visible = false;
-                    btnHand.Text = "show hand";
-                    btnDrawCard.Enabled = false;
-                    break;
-                case false:
-                    panel1.Visible = true;
-                    btnHand.Text = "hide hand";
-                    if (currentGame.currentPlayer.hand.Count < 5)
-                    {
-                        btnDrawCard.Enabled = true;
-                    }
-                    break;
+                CurrentGame.CurrentPlayer.Hand.Add(CurrentGame.Deck.DrawCard());
+                CurrentGame.CurrentPlayer.Hand.Sort();
+                CurrentGame.PrepareNextPlayer();
+                RoundUpdate(CurrentGame.CurrentPlayer); //technically NEXT Player
             }
         }
 
-        private void playarea_FormClosed(object sender, FormClosedEventArgs e) //gbye
+        private void OnFormClosed(object sender, FormClosedEventArgs e) //gbye
         {
             Application.Exit();
         }
 
-        private void btnDiscard_Click(object sender, EventArgs e) //get ridda thet there card there
-        {            
-            DialogResult result = MessageBox.Show("are you sure you wish to discard " + currentGame.currentPlayer.selectedCard.ToString() + "?","HALT",MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
+        private void OnSquareClick(object sender, EventArgs e) //wut happen what you click a squrr
+        {
+            var square = (sender as BoardSquare);
+            if (!(square.Occupied))
             {
-                currentGame.currentPlayer.removeCard(currentGame.currentPlayer, currentGame.currentPlayer.selectedCard);
-                currentGame.currentPlayer.hand.Sort();
-                currentGame.prepareNextPlayer();
-                roundUpdate(currentGame.currentPlayer); //technically NEXT player
+                square.Occupy(CurrentGame.CurrentPlayer);
+                if (square.Occupied)
+                {
+                    //currentGame.CheckForWin(square);
+                    bool gameover = CurrentGame.CheckForWin();
+                    if (gameover == false)
+                    {
+                        CurrentGame.PrepareNextPlayer();
+                        RoundUpdate(CurrentGame.CurrentPlayer);
+                            //technically NEXT Player gets implemented because Player.ID == players[indexer++]                    
+                    }
+                    else
+                    {
+                        Application.Exit();
+                    }
+                }
             }
         }
 
-        private void btnDrawCard_Click(object sender, EventArgs e) //MOAR CARDS PLS
+        private void OnToggleHandClicked(object sender, EventArgs e)
+            //change the state of the panel with the card radiobuttons
         {
-            DialogResult result = MessageBox.Show("are you sure you wish to draw a new card?", "HALT", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {                
-                currentGame.currentPlayer.hand.Add(currentGame.gameDeck.draw(currentGame.gameDeck));
-                currentGame.currentPlayer.hand.Sort();
-                currentGame.prepareNextPlayer();
-                roundUpdate(currentGame.currentPlayer); //technically NEXT player
-            }
+            bool isVisible = cardsPanel.Visible;
+            btnHand.Text = isVisible ? "Show Hand" : "Hide Hand";
+            btnDrawCard.Enabled = !isVisible;
+            cardsPanel.Visible = !isVisible;
+        }
+
+        private void UpdateAvailableSquares(int chosenCard) //this updates the BoardSquare clickables
+        {
+            //Disable all the cards under the chosen card
+            Controls.GetItems<BoardSquare>(1, chosenCard).Each(s => s.Enabled = false);
+
+            //Enable all of the non-occupied cards above it.
+            Controls.GetItems<BoardSquare>(chosenCard, 100).Where(x => !x.Occupied).Each(x => x.Enabled = true);
         }
     }
 }

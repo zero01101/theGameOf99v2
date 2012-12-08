@@ -47,42 +47,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoardBuilder.cs" />
-    <Compile Include="boardsquare.cs">
+    <Compile Include="BoardSquare.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="cards.cs" />
+    <Compile Include="Card.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Deck.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Interfaces\ISquareCollection.cs" />
+    <Compile Include="Interfaces\ISelectable.cs" />
+    <Compile Include="PlayerSetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="PlayerSetup.Designer.cs">
+      <DependentUpon>PlayerSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="game.cs" />
-    <Compile Include="playarea.cs">
+    <Compile Include="Game.cs" />
+    <Compile Include="PlayArea.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="playarea.Designer.cs">
-      <DependentUpon>playarea.cs</DependentUpon>
+    <Compile Include="PlayArea.Designer.cs">
+      <DependentUpon>PlayArea.cs</DependentUpon>
     </Compile>
-    <Compile Include="player.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="playarea.resx">
-      <DependentUpon>playarea.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="SquareCollection.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -92,6 +83,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="playarea.resx">
+      <DependentUpon>PlayArea.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
