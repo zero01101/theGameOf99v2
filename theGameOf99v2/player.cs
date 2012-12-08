@@ -1,35 +1,34 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections.Generic;
 
 namespace theGameOf99v2
 {
-    public class player
+    public class Player
     {
-        public string name;
-        public int id;
-        public ArrayList hand;
-        public ArrayList ownedSquares;
-        public int selectedCard;
-
-        public player(string Name, int ID) //NEW PLAYAR PLS
+        public Player(string name, int id) //NEW PLAYAR PLS
         {
-            name = Name;
-            id = ID;
-            hand = new ArrayList();
-            ownedSquares = new ArrayList();
+            Name = name;
+            Id = id;
+            Hand = new List<int>();
+            OwnedSquares = new List<int>();
         }
 
-        public void removeCard(player player, int cardValueToRemove) //TAKE CARD AWAY PLS
+        public List<int> Hand { get; private set; }
+        public int Id { get; private set; }
+        public string Name { get; private set; }
+        public List<int> OwnedSquares { get; private set; }
+        public int SelectedCard { get; set; }
+
+        public void RemoveCardSelectedCard() //TAKE CARD AWAY PLS
         {
             int remember = -1;
-            for (int i = 0; i < player.hand.Count; i++)
+            for (int i = 0; i < Hand.Count; i++)
             {
-                if ((int)player.hand[i] == cardValueToRemove)
+                if (Hand[i] == SelectedCard)
                 {
                     remember = i;
                 }
             }
-            player.hand.Remove(player.hand[remember]);
+            Hand.Remove(Hand[remember]);
         }
     }
 }

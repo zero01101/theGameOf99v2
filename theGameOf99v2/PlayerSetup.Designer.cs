@@ -1,6 +1,6 @@
 ﻿namespace theGameOf99v2
 {
-    partial class Form1
+    partial class PlayerSetup
     {
         /// <summary>
         /// Required designer variable.
@@ -10,7 +10,7 @@
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param Name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -46,8 +46,8 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(183, 52);
             this.label1.TabIndex = 0;
-            this.label1.Text = "welcome to the game of 99!  \r\nchoose if you have a third player,\r\nname your playe" +
-                "rs,\r\nand have fun playing the game of 99!";
+            this.label1.Text = "welcome to the Game of 99!  \r\nchoose if you have a third Player,\r\nname your playe" +
+                "rs,\r\nand have fun playing the Game of 99!";
             // 
             // label2
             // 
@@ -57,7 +57,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 1;
-            this.label2.Text = "player 1";
+            this.label2.Text = "Player 1";
             // 
             // player1name
             // 
@@ -81,7 +81,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
             this.label3.TabIndex = 3;
-            this.label3.Text = "player 2";
+            this.label3.Text = "Player 2";
             // 
             // player3name
             // 
@@ -99,7 +99,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 5;
-            this.label4.Text = "player 3";
+            this.label4.Text = "Player 3";
             // 
             // checkBox1
             // 
@@ -108,7 +108,7 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(83, 17);
             this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "third player?";
+            this.checkBox1.Text = "third Player?";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
@@ -118,7 +118,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(278, 23);
             this.button1.TabIndex = 8;
-            this.button1.Text = "new game!";
+            this.button1.Text = "new Game!";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -141,7 +141,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(317, 230);
             this.Name = "Form1";
-            this.Text = "the game of 99! ";
+            this.Text = "the Game of 99! ";
             this.ResumeLayout(false);
             this.PerformLayout();
 

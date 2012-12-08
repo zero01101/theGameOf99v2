@@ -7,15 +7,17 @@ using System.Windows.Forms;
 
 namespace theGameOf99v2
 {
-    public partial class Form1 : Form
+    public partial class PlayerSetup : Form
     {
-        public Form1() //ctor doesn't do anything neat here
+        public PlayerSetup() //ctor doesn't do anything neat here
         {
             InitializeComponent();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e) //2 or 3 players, not too hard
         {
+            var player3Enabled = checkBox1.Checked;
+            player3name.Enabled = player3Enabled;
             switch (checkBox1.Checked)
             {
                 case true:
@@ -29,37 +31,37 @@ namespace theGameOf99v2
             }
         }
 
-        private void button1_Click(object sender, EventArgs e) //let's play a game why not
+        private void button1_Click(object sender, EventArgs e) //let's play a Game why not
         {
             string p1name = player1name.Text;
             string p2name = player2name.Text;
             string p3name = player3name.Text;
-            player[] players;
+            Player[] players;
 
             if (p1name.Trim() == "")
             {
-                p1name = "player 1";               
+                p1name = "Player 1";               
             }
             if (p2name.Trim() == "")
             {
-                p2name = "player 2";
+                p2name = "Player 2";
             }
             if (p3name.Trim() == "")
             {
-                p3name = "player 3";
+                p3name = "Player 3";
             }
-            player player1 = new player(p1name, 1);
-            player player2 = new player(p2name, 2);
+            var player1 = new Player(p1name, 1);
+            var player2 = new Player(p2name, 2);
             if (checkBox1.Checked)
             {
-                player player3 = new player(p3name, 3);
-                players = new player[] { player1, player2, player3 };
+                Player player3 = new Player(p3name, 3);
+                players = new Player[] { player1, player2, player3 };
             }
             else
             {
-                players = new player[] { player1, player2 };
+                players = new Player[] { player1, player2 };
             }
-            game LeJeuDe99 = new game(players);
+            var LeJeuDe99 = new Game(players);
             this.Hide();
         }
     }
